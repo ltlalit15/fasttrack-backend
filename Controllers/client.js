@@ -332,7 +332,7 @@ export const changePassword = async (req, res) => {
 
   try {
     // 1. Get current hashed password from DB
-    const [userRows] = await pool.query("SELECT password FROM users WHERE id = ?", [userId]);
+    const [userRows] = await pool.query("SELECT password FROM clients WHERE id = ?", [userId]);
 
     if (userRows.length === 0) {
       return res.status(404).json({ message: "User not found." });
@@ -350,7 +350,7 @@ export const changePassword = async (req, res) => {
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
     // 4. Update password in DB
-    await pool.query("UPDATE users SET password = ? WHERE id = ?", [hashedPassword, userId]);
+    await pool.query("UPDATE clients SET password = ? WHERE id = ?", [hashedPassword, userId]);
 
     res.status(200).json({ message: "Password changed successfully." });
 
