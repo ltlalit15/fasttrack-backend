@@ -1,14 +1,13 @@
-
-
+// live mode
 import { JSONCookie } from 'cookie-parser';
 import { query } from 'express';
 import mysql from 'mysql2/promise';
 export const pool = mysql.createPool({
-  host: "localhost",     // 👈 Localhost for local MySQL
-  port: 3306,            // 👈 Default MySQL port
-  user: "root",          // 👈 Your local MySQL username
-  password: "",          // 👈 Or your local MySQL password
-  database: "fasttrack",                // Database Name
+  host: "caboose.proxy.rlwy.net",     // 👉 Railway DB Host
+  port: 29120,                         // 👉 Railway Port
+  user: "root",                        // 👉 Username
+  password: "iKRaPAybhvSkhqWlkRYzRoEMEbZaSgDj", // 👉 Password
+  database: "railway",                // 👉 Database name
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
