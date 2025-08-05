@@ -58,13 +58,14 @@ const upload = multer({ storage: storage });
 
 // ✅ Proper CORS Configuration
 app.use(
-    cors({
-        origin: "*", // Sabhi origins allowed hain
-        methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // ✅ Specific HTTP methods allow kar rahe hain
-        allowedHeaders: ["Content-Type", "Authorization"], // ✅ Required headers allow karein
-        credentials: true, // ✅ Agar cookies allow karni hain
-    })
+  cors({
+    origin: ['http://localhost:5173', 'https://fasttracksoftware.netlify.app'],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
 );
+
 
 app.use(morgan("dev"));
 app.use(bodyParser.json({ limit: "50mb" }));
