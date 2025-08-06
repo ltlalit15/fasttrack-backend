@@ -3,14 +3,19 @@ import {
   bookAppointment,
 //   getAppointmentsByClient,
   rescheduleAppointment,
-//   getAvailableTimeSlots
+  getappointmentsByClientId,
+  getappointments
 } from '../Controllers/bookAppointmentcontroller.js';
 
 const router = express.Router();
 
 router.post('/bookAppointment', bookAppointment);
-// router.get('/getAppointmentsByClient/:clientId', getAppointmentsByClient);
+router.get('/getappointments', getappointments);
 router.put('/rescheduleAppointment/:id', rescheduleAppointment);
+router.get('/getappointmentsByClientId/:client_id', getappointmentsByClientId);
+
+
+
 // router.get('/getAvailableTimeSlots', getAvailableTimeSlots);
 
 export default router;
