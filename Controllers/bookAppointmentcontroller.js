@@ -3,7 +3,6 @@ import { pool } from "../Config/dbConnect.js";
 export const bookAppointment = async (req, res) => {
   const {
     client_id,
-    staff_id,
     date,
     time,
     duration,
@@ -45,6 +44,25 @@ export const bookAppointment = async (req, res) => {
 // };
 
 
+export const getappointments = async (req, res) => {
+try {
+    const sql = `SELECT 
+  a.*, 
+  c.name AS client_name
+FROM 
+  appointments a
+LEFT JOIN 
+  clients c ON a.client_id = c.id`;
+
+    const [rows] = await pool.query(sql);
+
+    res.status(200).json({ status: 'success', data: rows });
+  } catch (err) {
+    console.error('Error:', err);
+    res.status(500).json({ status: 'error', message: 'Internal Server Error' });
+  }
+};
+
 export const rescheduleAppointment = async (req, res) => {
   const appointmentId = req.params.id;
   const { new_date, new_time, reason } = req.body;
@@ -62,6 +80,28 @@ export const rescheduleAppointment = async (req, res) => {
     res.status(500).json({ message: "Error rescheduling appointment", error: err.message });
   }
 };
+
+
+export const getappointmentsByClientId = async (req, res) => {
+  const { client_id } = req.params;
+
+  try {
+    const [cases] = await pool.query(
+      "SELECT * FROM appointments WHERE client_id = ?",
+      [client_id]
+    );
+
+    if (cases.length === 0) {
+      return res.status(404).json({ message: "No appointments found for this client ID" });
+    }
+
+    res.status(200).json(cases);
+  } catch (error) {
+    console.error("Error fetching appointments by client ID:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+};
+
 
 
 // export const getAvailableTimeSlots = async (req, res) => {
