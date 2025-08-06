@@ -30,7 +30,7 @@ export const uploadClientDocument = async (req, res) => {
       [client_id, result.secure_url]
     );
 
-    fs.unlink(file.tempFilePath, () => {});
+    fs.unlink(file.tempFilePath, () => { });
 
     res.status(200).json({
       message: "Document uploaded successfully",
@@ -53,9 +53,6 @@ export const deleteClientDocument = async (req, res) => {
   }
 };
 
-
-
-
 export const ClientDocuments = async (req, res) => {
   const { client_id } = req.params;
   try {
@@ -66,3 +63,22 @@ export const ClientDocuments = async (req, res) => {
     res.status(500).json({ message: "Internal error", error: err.message });
   }
 };
+
+export const getallClientDocuments = async (req, res) => {
+  try {
+    const sql = `SELECT 
+  a.*, 
+  c.name AS client_name
+FROM 
+  documents a
+LEFT JOIN 
+  clients c ON a.client_id = c.id`;
+    const [rows] = await pool.query(sql);
+
+    res.status(200).json({ status: 'success', data: rows });
+  } catch (err) {
+    console.error('Error:', err);
+    res.status(500).json({ status: 'error', message: 'Internal Server Error' });
+  }
+};
+
