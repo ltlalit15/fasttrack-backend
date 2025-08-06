@@ -19,6 +19,4 @@ router.delete("/inquiry/:id", deleteInquiry);
 router.patch("/inquirystatus/:id", updateInquirystatus);
 
 
-
-
 export default router;
