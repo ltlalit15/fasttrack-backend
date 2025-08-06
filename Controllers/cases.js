@@ -1,11 +1,9 @@
 import { pool } from "../Config/dbConnect.js";
-
-
+ 
 export const addCase = async (req, res) => {
   const {
     client_id,
-    solicitor_id,
-    case_type,
+    case_type_id,
     case_number,
     status,
     case_details,
@@ -26,14 +24,14 @@ export const addCase = async (req, res) => {
     // 2. Insert case data
     await pool.query(
       `INSERT INTO cases (
-        client_id, solicitor_id, case_type, case_number, status,
+        client_id,  case_type_id, case_number, status,
         case_details, start_date, next_hearing_date, trial_date,
         discovery_deadline, progress_percent
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      ) VALUES (?,  ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         client_id,
-        solicitor_id,
-        case_type,
+
+        case_type_id,
         case_number,
         status,
         case_details,
@@ -105,8 +103,8 @@ export const updateCase = async (req, res) => {
     // 2. Only update fields if provided
     const updatedData = {
       client_id: updates.client_id ?? existing.client_id,
-      solicitor_id: updates.solicitor_id ?? existing.solicitor_id,
-      case_type: updates.case_type ?? existing.case_type,
+
+      case_type_id: updates.case_type_id ?? existing.case_type_id,
       case_number: updates.case_number ?? existing.case_number,
       status: updates.status ?? existing.status,
       case_details: updates.case_details ?? existing.case_details,
@@ -120,14 +118,14 @@ export const updateCase = async (req, res) => {
     // 3. Update DB
     await pool.query(
       `UPDATE cases SET
-        client_id = ?, solicitor_id = ?, case_type = ?, case_number = ?, status = ?,
+        client_id = ?, case_type_id = ?, case_number = ?, status = ?,
         case_details = ?, start_date = ?, next_hearing_date = ?, trial_date = ?,
         discovery_deadline = ?, progress_percent = ?
        WHERE id = ?`,
       [
         updatedData.client_id,
-        updatedData.solicitor_id,
-        updatedData.case_type,
+
+        updatedData.case_type_id,
         updatedData.case_number,
         updatedData.status,
         updatedData.case_details,
@@ -145,11 +143,17 @@ export const updateCase = async (req, res) => {
     res.status(500).json({ message: "Error updating case", error: err.message });
   }
 };
-    
+
 
 export const getallcase = async (req, res) => {
   try {
-    const [results] = await pool.query("SELECT * FROM cases");
+    const [results] = await pool.query(`SELECT 
+  a.*, 
+  c.name AS client_name
+FROM 
+  cases a
+LEFT JOIN 
+  clients c ON a.client_id = c.id`);
     res.status(200).json(results);
   } catch (err) {
     res.status(500).json({ message: "Error fetching clients", error: err.message });
