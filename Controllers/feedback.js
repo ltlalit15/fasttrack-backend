@@ -32,6 +32,18 @@ export const getFeedback = async (req, res) => {
     }
 };
 
+export const deletefeedback = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await pool.query("DELETE FROM feedbacks WHERE id = ?", [id]);
+    res.status(200).json({ message: "Documents deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Internal error", error: err.message });
+  }
+};
+
+
+
 
 
 
