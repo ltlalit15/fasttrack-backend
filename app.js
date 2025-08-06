@@ -19,7 +19,7 @@ import contactRoutes from "./Routers/contactRoutes.js"; // Adjust the import pat
 
 import appointmentRoutes from "./Routers/appointmentRoutes.js"; // Adjust the import path as needed
 
-
+import caseTypeRoute from "./Routers/caseTypeRoute.js"; 
 
 
 
@@ -46,6 +46,7 @@ router.use("/api/f1", cases);
 router.use("/api/f1", documentRouter);
 router.use("/api/f1", contactRoutes);
 router.use("/api/f1", appointmentRoutes);
+router.use('/api/f1', caseTypeRoute);
 
 
 
