@@ -21,8 +21,8 @@ export const sendEmail = async (options) => {
       <div style="font-family: Arial, sans-serif; font-size: 15px; color: #333;">
         <h2>Password Reset Request</h2>
         <p>Hi,</p>
-        <p>Click the button below to reset your password:</p>
-        <a href="https://fasttracksoftware.netlify.app/resetpassword?token=${options.resetToken}" 
+        <p>Click the button below to reset your password:</p> 
+        <a href="http://localhost:5173/resetpassword?token=${options.resetToken}" 
            style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px;">
           Reset Password
         </a>

@@ -167,7 +167,16 @@ export const getCasesByClientId = async (req, res) => {
 
   try {
     const [cases] = await pool.query(
-      "SELECT * FROM cases WHERE client_id = ?",
+      `SELECT 
+  cases.*,
+  casetypes.name AS case_type_name
+FROM 
+  cases
+JOIN 
+  casetypes ON cases.case_type_id = casetypes.id
+WHERE 
+  cases.client_id = ?;
+`,
       [client_id]
     );
 

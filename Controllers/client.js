@@ -50,6 +50,8 @@ export const addNewClient = async (req, res) => {
     
   } = req.body;
 //39
+
+console.log("req.body",req.body)
   try {
     // Step 1: Check for duplicate email
     const [existing] = await pool.query("SELECT id FROM clients WHERE email = ?", [email]);
