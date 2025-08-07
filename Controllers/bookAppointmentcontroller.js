@@ -103,6 +103,62 @@ export const getappointmentsByClientId = async (req, res) => {
 };
 
 
+export const requestReschedule = async (req, res) => {
+  const appointmentId = req.params.id;
+  const { new_date, new_time, reason } = req.body;
+
+  try {
+    const [update] = await pool.query(
+      `UPDATE appointments
+       SET requested_new_date = ?, requested_new_time = ?, reschedule_reason = ?, reschedule_status = 'Pending', reschedule_requested = true
+       WHERE id = ?`,
+      [new_date, new_time, reason, appointmentId]
+    );
+
+    res.status(200).json({ message: "Reschedule request sent to admin." });
+  } catch (err) {
+    res.status(500).json({ message: "Error requesting reschedule", error: err.message });
+  }
+};
+
+export const handleRescheduleRequest = async (req, res) => {
+  const appointmentId = req.params.id;
+  const { action } = req.body; // action = "approve" or "reject"
+
+  try {
+    if (action === 'approve') {
+      const [update] = await pool.query(
+        `UPDATE appointments
+         SET date = requested_new_date,
+             time = requested_new_time,
+             status = 'Rescheduled',
+             reschedule_status = 'Approved',
+             reschedule_requested = false,
+             updated_at = NOW()
+         WHERE id = ?`,
+        [appointmentId]
+      );
+      res.status(200).json({ message: "Reschedule approved and updated." });
+    } else if (action === 'reject') {
+      const [update] = await pool.query(
+        `UPDATE appointments
+         SET reschedule_status = 'Rejected',
+             reschedule_requested = false
+         WHERE id = ?`,
+        [appointmentId]
+      );
+      res.status(200).json({ message: "Reschedule request rejected." });
+    } else {
+      res.status(400).json({ message: "Invalid action" });
+    }
+  } catch (err) {
+    res.status(500).json({ message: "Error handling reschedule", error: err.message });
+  }
+};
+
+
+
+
 
 // export const getAvailableTimeSlots = async (req, res) => {
 //   const { staff_id, date } = req.query;

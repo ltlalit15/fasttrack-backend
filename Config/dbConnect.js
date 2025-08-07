@@ -1,4 +1,4 @@
-// live mode
+
 import { JSONCookie } from 'cookie-parser';
 import { query } from 'express';
 import mysql from 'mysql2/promise';
