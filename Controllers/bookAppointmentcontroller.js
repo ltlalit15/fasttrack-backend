@@ -187,7 +187,15 @@ export const handleRescheduleRequest = async (req, res) => {
 
 export const getappointmentreschedule = async (req, res) => {
   try {
-    const [appointments] = await pool.query('SELECT * FROM appointments');
+    const [appointments] = await pool.query(`
+      SELECT 
+        a.*, 
+        c.name AS client_name
+      FROM 
+        appointments a
+      LEFT JOIN 
+        clients c ON a.client_id = c.id
+    `);
 
     // Filter appointments that have a reschedule_reason (not null)
     const filteredAppointments = appointments
@@ -203,10 +211,10 @@ export const getappointmentreschedule = async (req, res) => {
           status: item.status,
           reschedule_reason: item.reschedule_reason,
           created_at: item.created_at,
-          client_name: item.client_name
+          client_name: item.client_name  // Comes from clients table
         };
 
-        // Only add reschedule-related fields if they are not null
+        // Add only non-null reschedule fields
         if (item.requested_new_date !== null) filteredItem.requested_new_date = item.requested_new_date;
         if (item.requested_new_time !== null) filteredItem.requested_new_time = item.requested_new_time;
         if (item.reschedule_requested !== null) filteredItem.reschedule_requested = item.reschedule_requested;
