@@ -24,7 +24,13 @@ export const submitFeedback = async (req, res) => {
 
 export const getFeedback = async (req, res) => {
     try {
-        const [results] = await pool.query("SELECT * FROM feedbacks ORDER BY submitted_at DESC");
+        const [results] = await pool.query(`SELECT 
+  a.*, 
+  c.name AS client_name
+FROM 
+  feedbacks a
+LEFT JOIN 
+  clients c ON a.client_id = c.id`);
         res.status(200).json(results);
     } catch (error) {
         console.error("❌ Error fetching feedback:", error);
@@ -47,3 +53,4 @@ export const deletefeedback = async (req, res) => {
 
 
 
+ 

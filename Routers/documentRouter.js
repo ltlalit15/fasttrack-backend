@@ -12,4 +12,12 @@ router.delete("/deleteClientDocument/:id", deleteClientDocument);
 router.get("/getallClientDocuments", getallClientDocuments);
 
 
+
+
+
+
+
+
+
+
 export default router;

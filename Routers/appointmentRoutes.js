@@ -17,5 +17,5 @@ router.get('/getappointmentsByClientId/:client_id', getappointmentsByClientId);
 
 
 // router.get('/getAvailableTimeSlots', getAvailableTimeSlots);
-
+  
 export default router;
