@@ -183,3 +183,41 @@ export const handleRescheduleRequest = async (req, res) => {
 //     res.status(500).json({ message: "Error fetching time slots", error: err.message });
 //   }
 // };
+
+
+export const getappointmentreschedule = async (req, res) => {
+  try {
+    const [appointments] = await pool.query('SELECT * FROM appointments');
+
+    // Filter appointments that have a reschedule_reason (not null)
+    const filteredAppointments = appointments
+      .filter(item => item.reschedule_reason !== null)
+      .map(item => {
+        const filteredItem = {
+          id: item.id,
+          client_id: item.client_id,
+          date: item.date,
+          time: item.time,
+          duration: item.duration,
+          case_id: item.case_id,
+          status: item.status,
+          reschedule_reason: item.reschedule_reason,
+          created_at: item.created_at,
+          client_name: item.client_name
+        };
+
+        // Only add reschedule-related fields if they are not null
+        if (item.requested_new_date !== null) filteredItem.requested_new_date = item.requested_new_date;
+        if (item.requested_new_time !== null) filteredItem.requested_new_time = item.requested_new_time;
+        if (item.reschedule_requested !== null) filteredItem.reschedule_requested = item.reschedule_requested;
+        if (item.reschedule_status !== null) filteredItem.reschedule_status = item.reschedule_status;
+
+        return filteredItem;
+      });
+
+    res.json({ status: 'success', data: filteredAppointments });
+  } catch (error) {
+    console.error("Error fetching reschedule data:", error);
+    res.status(500).json({ status: 'fail', message: 'Server Error' });
+  }
+};

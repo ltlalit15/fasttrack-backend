@@ -7,6 +7,7 @@ import {
   getappointments,
    requestReschedule,
   handleRescheduleRequest,
+  getappointmentreschedule
 } from '../Controllers/bookAppointmentcontroller.js';
 
 const router = express.Router();
@@ -19,6 +20,10 @@ router.put('/requestReschedule/:id', requestReschedule);
 
 // Admin handles (approve/reject) the reschedule request
 router.put('/handleRescheduleRequest/:id', handleRescheduleRequest);
+router.get('/getappointmentreschedule', getappointmentreschedule);
+
+
+
 
 
 
