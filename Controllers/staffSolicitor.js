@@ -4,7 +4,7 @@ export const addStaffSolicitor = async (req, res) => {
   const { name, email, role, canView, canCreate, canEdit, canDelete } = req.body;
   try {
     await pool.query(
-      `INSERT INTO staffsolicitors 
+      `INSERT INTO clients 
        (name, email, role, canView, canCreate, canEdit, canDelete) 
        VALUES (?, ?, ?, ?, ?, ?, ?)`,
       [name, email, role, canView, canCreate, canEdit, canDelete]
@@ -19,7 +19,7 @@ export const addStaffSolicitor = async (req, res) => {
 
 export const getAllStaffSolicitors = async (req, res) => {
   try {
-    const [rows] = await pool.query(`SELECT * FROM staffsolicitors`);
+    const [rows] = await pool.query(`SELECT * FROM clients`);
     res.status(200).json({ status: 'success', message: 'Reterived All data',  data: rows });
   } catch (error) {
     res.status(500).json({ status: 'error', message: 'Failed to retrieve Staff/Solicitors', error });
@@ -31,7 +31,7 @@ export const getAllStaffSolicitors = async (req, res) => {
 export const getStaffSolicitorById = async (req, res) => {
   const { id } = req.params;
   try {
-    const [rows] = await pool.query(`SELECT * FROM staffsolicitors WHERE id = ?`, [id]);
+    const [rows] = await pool.query(`SELECT * FROM clients WHERE id = ?`, [id]);
     if (rows.length === 0) {
       return res.status(404).json({ status: 'error', message: 'Staff/Solicitor not found' });
     }
@@ -48,7 +48,7 @@ export const updateStaffSolicitor = async (req, res) => {
   const { name, email, role, canView, canCreate, canEdit, canDelete } = req.body;
   try {
     const [result] = await pool.query(
-      `UPDATE staffsolicitors 
+      `UPDATE clients 
        SET name=?, email=?, role=?, canView=?, canCreate=?, canEdit=?, canDelete=? 
        WHERE id=?`,
       [name, email, role, canView, canCreate, canEdit, canDelete, id]
@@ -67,7 +67,7 @@ export const updateStaffSolicitor = async (req, res) => {
 export const deleteStaffSolicitor = async (req, res) => {
   const { id } = req.params;
   try {
-    const [result] = await pool.query(`DELETE FROM staffsolicitors WHERE id=?`, [id]);
+    const [result] = await pool.query(`DELETE FROM clients WHERE id=?`, [id]);
     if (result.affectedRows === 0) {
       return res.status(404).json({ status: 'error', message: 'Staff/Solicitor not found' });
     }
