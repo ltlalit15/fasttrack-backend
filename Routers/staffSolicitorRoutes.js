@@ -12,7 +12,7 @@ const router = express.Router();
 router.post("/", addStaffSolicitor);
 router.get("/", getAllStaffSolicitors);
 router.get("/:id", getStaffSolicitorById);
-router.put("/:id", updateStaffSolicitor);
+router.patch("/:id", updateStaffSolicitor);
 router.delete("/:id", deleteStaffSolicitor);
 
 export default router;
