@@ -1,22 +1,58 @@
 import { pool } from "../Config/dbConnect.js";
 
+import bcrypt from "bcrypt";
+
 export const addStaffSolicitor = async (req, res) => {
+  console.log("📥 Incoming Request Body:", req.body); // Request data log
+
   const { name, email, password, role, canView, canCreate, canEdit, canDelete } = req.body;
+
   try {
-    // Password hash
+    // Step 1: Password hashing
+    console.log("🔐 Hashing password...");
     const hashedPassword = await bcrypt.hash(password, 10); // 10 salt rounds
-    await pool.query(
-      `INSERT INTO clients 
-       (name, email, password, role, canView, canCreate, canEdit, canDelete) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      [name, email, hashedPassword, role, canView, canCreate, canEdit, canDelete]
-    );
-    res.status(201).json({ status: 'success', message: 'Staff/Solicitor added successfully' });
+    console.log("✅ Password hashed successfully");
+
+    // Step 2: Prepare SQL query
+    const query = `
+      INSERT INTO clients 
+      (name, email, password, role, canView, canCreate, canEdit, canDelete) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    const values = [
+      name || null,
+      email || null,
+      hashedPassword || null,
+      role || null,
+      canView || null,
+      canCreate || null,
+      canEdit || null,
+      canDelete || null
+    ];
+
+    console.log("📝 Query:", query);
+    console.log("📦 Values:", values);
+
+    // Step 3: Execute query
+    const [result] = await pool.query(query, values);
+    console.log("✅ Insert Success. MySQL Response:", result);
+
+    // Step 4: Send success response
+    res.status(201).json({
+      status: 'success',
+      message: 'Staff/Solicitor added successfully'
+    });
+
   } catch (error) {
-    res.status(500).json({ status: 'error', message: 'Failed to add Staff/Solicitor', error });
+    console.error("❌ Error inserting into clients table:", error);
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to add Staff/Solicitor',
+      error: error.message || error
+    });
   }
 };
-
 
 
 export const getAllStaffSolicitors = async (req, res) => {
