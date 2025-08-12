@@ -19,7 +19,7 @@ export const addStaffSolicitor = async (req, res) => {
 
 export const getAllStaffSolicitors = async (req, res) => {
   try {
-    const [rows] = await pool.query(`SELECT * FROM staffsolicitors ORDER BY created_at DESC`);
+    const [rows] = await pool.query(`SELECT * FROM staffsolicitors`);
     res.status(200).json({ status: 'success', message: 'Reterived All data',  data: rows });
   } catch (error) {
     res.status(500).json({ status: 'error', message: 'Failed to retrieve Staff/Solicitors', error });
