@@ -8,7 +8,10 @@ export const Admindashboard = async (req, res) => {
     const [clientsCount] = await pool.query(`SELECT COUNT(*) AS totalclients FROM  clients WHERE role = 'client'`);
     const [casesCount] = await pool.query(`SELECT COUNT(*) AS totalcases FROM cases`);
     const [staffCount] = await pool.query(`SELECT COUNT(*) AS totalstaff FROM clients WHERE LOWER(role) = 'staff'`);
-    const [staffList] = await pool.query(`SELECT * FROM clients`);
+    const [staffList] = await pool.query(`SELECT * FROM clients WHERE LOWER(role) = 'staff'`);
+
+
+
     
     // Current month inquiries
     const [inquiriesCount] = await pool.query(`
