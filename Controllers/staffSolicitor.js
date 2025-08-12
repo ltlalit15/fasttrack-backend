@@ -82,21 +82,47 @@ export const getStaffSolicitorById = async (req, res) => {
 
 
 export const updateStaffSolicitor = async (req, res) => {
+  console.log("📥 Incoming Request Params:", req.params);
+  console.log("📥 Incoming Request Body:", req.body);
+
   const { id } = req.params;
-  const { name, email, role, canView, canCreate, canEdit, canDelete } = req.body;
+  const { name, email, password, role, canView, canCreate, canEdit, canDelete } = req.body;
+
   try {
-    const [result] = await pool.query(
-      `UPDATE clients 
-       SET name=?, email=?, password = ?, role=?, canView=?, canCreate=?, canEdit=?, canDelete=? 
-       WHERE id=?`,
-      [name, email, password, role, canView, canCreate, canEdit, canDelete, id]
-    );
+    // Password hash
+    console.log("🔐 Hashing password...");
+    const hashedPassword = await bcrypt.hash(password, 10);
+    console.log("✅ Password hashed successfully");
+
+    const query = `
+      UPDATE clients 
+      SET name = ?, email = ?, password = ?, role = ?, canView = ?, canCreate = ?, canEdit = ?, canDelete = ? 
+      WHERE id = ?
+    `;
+    const values = [name, email, hashedPassword, role, canView, canCreate, canEdit, canDelete, id];
+
+    console.log("📝 Query:", query);
+    console.log("📦 Values:", values);
+
+    const [result] = await pool.query(query, values);
+    console.log("✅ Update Success. MySQL Response:", result);
+
     if (result.affectedRows === 0) {
       return res.status(404).json({ status: 'error', message: 'Staff/Solicitor not found' });
     }
-    res.status(200).json({ status: 'success', message: 'Staff/Solicitor updated successfully' });
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Staff/Solicitor updated successfully'
+    });
+
   } catch (error) {
-    res.status(500).json({ status: 'error', message: 'Failed to update Staff/Solicitor', error });
+    console.error("❌ Error updating clients table:", error);
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to update Staff/Solicitor',
+      error: error.message || error
+    });
   }
 };
 
