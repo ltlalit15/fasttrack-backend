@@ -3,11 +3,13 @@ import { pool } from "../Config/dbConnect.js";
 export const addStaffSolicitor = async (req, res) => {
   const { name, email, password, role, canView, canCreate, canEdit, canDelete } = req.body;
   try {
+    // Password hash
+    const hashedPassword = await bcrypt.hash(password, 10); // 10 salt rounds
     await pool.query(
       `INSERT INTO clients 
        (name, email, password, role, canView, canCreate, canEdit, canDelete) 
        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      [name, email, password, role, canView, canCreate, canEdit, canDelete]
+      [name, email, hashedPassword, role, canView, canCreate, canEdit, canDelete]
     );
     res.status(201).json({ status: 'success', message: 'Staff/Solicitor added successfully' });
   } catch (error) {
