@@ -5,7 +5,7 @@ import {
   getStaffSolicitorById,
   updateStaffSolicitor,
   deleteStaffSolicitor
-} from "../controllers/staffSolicitor.js";
+} from "../Controllers/staffSolicitor.js";
 
 const router = express.Router();
 
