@@ -5,23 +5,14 @@ import {
   getStaffSolicitorById,
   updateStaffSolicitor,
   deleteStaffSolicitor
-} from '../controllers/staffSolicitor.js';
+} from "../controllers/staffSolicitor.js";
 
 const router = express.Router();
 
-// Add new staff/solicitor
-router.post('/', addStaffSolicitor);
-
-// Get all staff/solicitors
-router.get('/', getAllStaffSolicitors);
-
-// Get by ID
-router.get('/:id', getStaffSolicitorById);
-
-// Update staff/solicitor
-router.put('/:id', updateStaffSolicitor);
-
-// Delete staff/solicitor
-router.delete('/:id', deleteStaffSolicitor);
+router.post("/", addStaffSolicitor);
+router.get("/", getAllStaffSolicitors);
+router.get("/:id", getStaffSolicitorById);
+router.put("/:id", updateStaffSolicitor);
+router.delete("/:id", deleteStaffSolicitor);
 
 export default router;
