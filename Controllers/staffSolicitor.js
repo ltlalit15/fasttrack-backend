@@ -1,13 +1,13 @@
 import { pool } from "../Config/dbConnect.js";
 
 export const addStaffSolicitor = async (req, res) => {
-  const { name, email, role, canView, canCreate, canEdit, canDelete } = req.body;
+  const { name, email, password, role, canView, canCreate, canEdit, canDelete } = req.body;
   try {
     await pool.query(
       `INSERT INTO clients 
-       (name, email, role, canView, canCreate, canEdit, canDelete) 
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      [name, email, role, canView, canCreate, canEdit, canDelete]
+       (name, email, password, role, canView, canCreate, canEdit, canDelete) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      [name, email, password, role, canView, canCreate, canEdit, canDelete]
     );
     res.status(201).json({ status: 'success', message: 'Staff/Solicitor added successfully' });
   } catch (error) {
@@ -49,9 +49,9 @@ export const updateStaffSolicitor = async (req, res) => {
   try {
     const [result] = await pool.query(
       `UPDATE clients 
-       SET name=?, email=?, role=?, canView=?, canCreate=?, canEdit=?, canDelete=? 
+       SET name=?, email=?, password = ?, role=?, canView=?, canCreate=?, canEdit=?, canDelete=? 
        WHERE id=?`,
-      [name, email, role, canView, canCreate, canEdit, canDelete, id]
+      [name, email, password, role, canView, canCreate, canEdit, canDelete, id]
     );
     if (result.affectedRows === 0) {
       return res.status(404).json({ status: 'error', message: 'Staff/Solicitor not found' });
