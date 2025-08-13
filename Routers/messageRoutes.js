@@ -1,5 +1,5 @@
 import express from 'express';
-import { sendMessage, getChatHistory } from '../Controllers/chatcontroller.js';
+import { sendMessage, getChatHistory } from '../Controllers/messageController.js';
 
 const router = express.Router();
 
