@@ -11,7 +11,8 @@ export const addCase = async (req, res) => {
     next_hearing_date,
     trial_date,
     discovery_deadline,
-    progress_percent
+    progress_percent,
+    solicitor_id 
   } = req.body;
 
   try {
@@ -26,8 +27,8 @@ export const addCase = async (req, res) => {
       `INSERT INTO cases (
         client_id,  case_type_id, case_number, status,
         case_details, start_date, next_hearing_date, trial_date,
-        discovery_deadline, progress_percent
-      ) VALUES (?,  ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        discovery_deadline, progress_percent, solicitor_id
+      ) VALUES (?,  ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         client_id,
 
@@ -39,7 +40,8 @@ export const addCase = async (req, res) => {
         next_hearing_date,
         trial_date,
         discovery_deadline,
-        progress_percent || 0
+        progress_percent || 0,
+        solicitor_id || null
       ]
     );
 
@@ -103,7 +105,6 @@ export const updateCase = async (req, res) => {
     // 2. Only update fields if provided
     const updatedData = {
       client_id: updates.client_id ?? existing.client_id,
-
       case_type_id: updates.case_type_id ?? existing.case_type_id,
       case_number: updates.case_number ?? existing.case_number,
       status: updates.status ?? existing.status,
@@ -113,6 +114,7 @@ export const updateCase = async (req, res) => {
       trial_date: updates.trial_date ?? existing.trial_date,
       discovery_deadline: updates.discovery_deadline ?? existing.discovery_deadline,
       progress_percent: updates.progress_percent ?? existing.progress_percent,
+      solicitor_id: updates.solicitor_id ?? existing.solicitor_id // ✅ optional 
     };
 
     // 3. Update DB
@@ -134,6 +136,7 @@ export const updateCase = async (req, res) => {
         updatedData.trial_date,
         updatedData.discovery_deadline,
         updatedData.progress_percent,
+        updatedData.solicitor_id,
         id
       ]
     );
