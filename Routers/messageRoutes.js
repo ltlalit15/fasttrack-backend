@@ -1,5 +1,5 @@
 import express from 'express';
-import { send_message, getChatHistory } from '../Controllers/messageController.js';
+import { send_message, get_messages } from '../Controllers/messageController.js';
 
 const router = express.Router();
 
@@ -7,7 +7,7 @@ const router = express.Router();
 router.post('/send', send_message);
 
 // ✅ Get chat history between admin & a specific client
-router.get('/history/:user1/:user2', send_message);
+router.get('/history/:user1/:user2', get_messages);
 
 
 export default router;
