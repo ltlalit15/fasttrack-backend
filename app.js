@@ -23,6 +23,8 @@ import caseTypeRoute from "./Routers/caseTypeRoute.js"; // Adjust the import pat
 
 import staffSolicitorRoutes from "./Routers/staffSolicitorRoutes.js";
 
+import messageRoutes from "./Routers/messageRoutes.js";
+
 
 
 const router = Router();
@@ -49,6 +51,8 @@ router.use("/api/f1", appointmentRoutes);
 router.use('/api/f1', caseTypeRoute);
 
 router.use('/api/f1', staffSolicitorRoutes);
+
+router.use('/api/f1', messageRoutes);
 
 
 
